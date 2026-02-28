@@ -1,6 +1,8 @@
-#########################################
-# Azure Static Web Apps — Free tier
-#########################################
+resource "azurerm_resource_group" "main" {
+  name     = "${local.prefix}-rg-01"
+  location = var.location
+  tags     = local.tags
+}
 
 resource "azurerm_static_web_app" "main" {
   name                = "${local.prefix}-stapp-01"

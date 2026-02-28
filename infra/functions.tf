@@ -1,16 +1,5 @@
-#########################################
-# Azure Functions — Flex Consumption Plan
-#########################################
-
-# Random suffix ensures globally unique storage account name
-resource "random_string" "st_suffix" {
-  length  = 4
-  upper   = false
-  special = false
-}
-
 resource "azurerm_storage_account" "functions" {
-  name                     = "${local.st_prefix}fnst01${random_string.st_suffix.result}"
+  name                     = "${local.st_prefix}st01"
   resource_group_name      = azurerm_resource_group.main.name
   location                 = var.location
   account_tier             = "Standard"

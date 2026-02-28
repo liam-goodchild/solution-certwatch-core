@@ -1,7 +1,3 @@
-#########################################
-# Outputs
-#########################################
-
 output "static_web_app_url" {
   description = "Default hostname of the Static Web App."
   value       = "https://${azurerm_static_web_app.main.default_host_name}"
