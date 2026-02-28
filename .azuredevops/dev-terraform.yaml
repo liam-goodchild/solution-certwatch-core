@@ -29,7 +29,7 @@ parameters:
 
 variables:
   # Container, Service Connection & tfvars
-  backendContainerName: infra-template-base
+  backendContainerName: solution-certwatch-core
   serviceConnectionName: sh-sc-certwatch
   globalTfvars: infra/vars/globals.tfvars
   tfvars: infra/vars/uks/$(environmentCode).tfvars

@@ -5,7 +5,7 @@
 resource "azurerm_communication_service" "main" {
   name                = "${local.prefix}-acs-01"
   resource_group_name = azurerm_resource_group.main.name
-  data_location       = "United Kingdom"
+  data_location       = "UK"
 
   tags = local.tags
 }
@@ -13,7 +13,7 @@ resource "azurerm_communication_service" "main" {
 resource "azurerm_email_communication_service" "main" {
   name                = "${local.prefix}-acs-email-01"
   resource_group_name = azurerm_resource_group.main.name
-  data_location       = "United Kingdom"
+  data_location       = "UK"
 
   tags = local.tags
 }
