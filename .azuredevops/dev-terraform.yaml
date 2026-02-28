@@ -30,7 +30,7 @@ parameters:
 variables:
   # Container, Service Connection & tfvars
   backendContainerName: infra-template-base
-  serviceConnectionName: sh-sc-base
+  serviceConnectionName: sh-sc-certwatch
   globalTfvars: infra/vars/globals.tfvars
   tfvars: infra/vars/uks/$(environmentCode).tfvars
   # State Management
