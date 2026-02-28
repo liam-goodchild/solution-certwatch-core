@@ -1,10 +1,5 @@
-trigger:
-  branches:
-    include:
-      - main
-  paths:
-    include:
-      - 'src/**'
+trigger: none
+pr: none
 
 pool:
   vmImage: ubuntu-latest
@@ -23,12 +18,12 @@ variables:
     environmentCode: prd
     functionAppName: sh-certwatch-prd-uks-func-01
     staticWebAppName: sh-certwatch-prd-uks-swa-01
-    serviceConnectionName: sh-sc-base
+    serviceConnectionName: sh-sc-certwatch
   ${{ else }}:
     environmentCode: dev
     functionAppName: sh-certwatch-dev-uks-func-01
     staticWebAppName: sh-certwatch-dev-uks-swa-01
-    serviceConnectionName: sh-sc-base
+    serviceConnectionName: sh-sc-certwatch
 
 stages:
   # Stage 1: Build API
