@@ -39,7 +39,7 @@ resource "azurerm_function_app_flex_consumption" "main" {
 
   storage_container_type      = "blobContainer"
   storage_container_endpoint  = azurerm_storage_account.functions.primary_blob_endpoint
-  storage_authentication_type = "StorageAccountConnectionString"
+  storage_authentication_type = "SystemAssignedIdentity"
 
   runtime_name    = "node"
   runtime_version = "20"
@@ -69,4 +69,11 @@ resource "azurerm_function_app_flex_consumption" "main" {
   }
 
   tags = local.tags
+}
+
+# Grant Function App identity blob data access to its backing storage account
+resource "azurerm_role_assignment" "function_storage_blob" {
+  scope                = azurerm_storage_account.functions.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = azurerm_function_app_flex_consumption.main.identity[0].principal_id
 }
