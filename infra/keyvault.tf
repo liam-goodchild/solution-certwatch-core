@@ -22,7 +22,7 @@ resource "azurerm_key_vault" "main" {
 resource "azurerm_role_assignment" "function_kv_secrets_user" {
   scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_linux_function_app.main.identity[0].principal_id
+  principal_id         = azurerm_function_app_flex_consumption.main.identity[0].principal_id
 }
 
 # Placeholder secrets for vendor API integrations (replace values post-deploy)

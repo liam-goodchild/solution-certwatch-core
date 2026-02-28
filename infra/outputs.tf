@@ -9,7 +9,7 @@ output "static_web_app_url" {
 
 output "function_app_url" {
   description = "Default hostname of the Function App."
-  value       = "https://${azurerm_linux_function_app.main.default_hostname}"
+  value       = "https://${azurerm_function_app_flex_consumption.main.default_hostname}"
 }
 
 output "cosmos_db_endpoint" {
