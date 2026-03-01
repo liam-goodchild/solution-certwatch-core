@@ -47,7 +47,7 @@ resource "azurerm_function_app_flex_consumption" "main" {
 
     # Azure Communication Services — auth via Managed Identity
     ACS_ENDPOINT     = "https://${azurerm_communication_service.main.name}.communication.azure.com"
-    ACS_SENDER_EMAIL = "noreply@${azurerm_email_communication_service_domain.main.mail_from_sender_domain}"
+    ACS_SENDER_EMAIL = "DoNotReply@${azurerm_email_communication_service_domain.main.mail_from_sender_domain}"
   }
 
   identity {
