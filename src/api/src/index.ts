@@ -19,4 +19,5 @@ import './functions/certifications/remove';
 import './functions/certifications/sync';
 import './functions/reminders/getPreferences';
 import './functions/reminders/updatePreferences';
+import './functions/reminders/testNotification';
 import './functions/providers/listProviders';

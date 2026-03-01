@@ -42,5 +42,7 @@ export const api = {
     getPreferences: () => request<ReminderPreferences>('/reminders/preferences'),
     updatePreferences: (body: Partial<ReminderPreferences>) =>
       request<ReminderPreferences>('/reminders/preferences', { method: 'PUT', body: JSON.stringify(body) }),
+    testNotification: () =>
+      request<{ status: string }>('/reminders/test', { method: 'POST' }),
   },
 };

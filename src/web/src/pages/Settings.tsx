@@ -10,6 +10,10 @@ export function Settings() {
 
   useEffect(() => {
     api.reminders.getPreferences()
+      .catch(() =>
+        // Profile doesn't exist yet — auto-provision with defaults, then retry
+        api.users.updateProfile({}).then(() => api.reminders.getPreferences())
+      )
       .then(setPrefs)
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load settings.'))
       .finally(() => setLoading(false));

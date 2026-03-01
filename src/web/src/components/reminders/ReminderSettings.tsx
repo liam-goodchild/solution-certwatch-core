@@ -11,6 +11,7 @@ export function ReminderSettings({ initial, onSaved }: Props) {
   const [prefs, setPrefs] = useState<ReminderPreferences>(initial);
   const [daysInput, setDaysInput] = useState(initial.emailDaysBefore.join(', '));
   const [saving, setSaving] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   async function handleSave(e: React.FormEvent) {
@@ -67,11 +68,32 @@ export function ReminderSettings({ initial, onSaved }: Props) {
         SMS reminders are not yet available but will be added in a future update.
       </div>
 
-      {message && <div style={{ fontSize: '0.875rem', color: message === 'Preferences saved.' ? '#16a34a' : '#dc2626' }}>{message}</div>}
+      {message && <div style={{ fontSize: '0.875rem', color: message.startsWith('Test email sent') || message === 'Preferences saved.' ? '#16a34a' : '#dc2626' }}>{message}</div>}
 
-      <button type="submit" disabled={saving} style={{ padding: '0.5rem 1.25rem', background: '#1a1a2e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start' }}>
-        {saving ? 'Saving...' : 'Save'}
-      </button>
+      <div style={{ display: 'flex', gap: '0.75rem', alignSelf: 'flex-start' }}>
+        <button type="submit" disabled={saving} style={{ padding: '0.5rem 1.25rem', background: '#1a1a2e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+          {saving ? 'Saving...' : 'Save'}
+        </button>
+        <button
+          type="button"
+          disabled={sendingTest}
+          onClick={async () => {
+            setSendingTest(true);
+            setMessage(null);
+            try {
+              await api.reminders.testNotification();
+              setMessage('Test email sent — check your inbox.');
+            } catch (err) {
+              setMessage(err instanceof Error ? err.message : 'Failed to send test email.');
+            } finally {
+              setSendingTest(false);
+            }
+          }}
+          style={{ padding: '0.5rem 1.25rem', background: '#fff', color: '#1a1a2e', border: '1px solid #d1d5db', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          {sendingTest ? 'Sending...' : 'Send test email'}
+        </button>
+      </div>
     </form>
   );
 }
