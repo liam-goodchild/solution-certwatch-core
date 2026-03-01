@@ -20,4 +20,3 @@ import './functions/certifications/sync';
 import './functions/reminders/getPreferences';
 import './functions/reminders/updatePreferences';
 import './functions/providers/listProviders';
-import './functions/jobs/dailyReminder';

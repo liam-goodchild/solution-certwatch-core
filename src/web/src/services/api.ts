@@ -1,24 +1,11 @@
 import type { Certification, CreateCertificationRequest, UpdateCertificationRequest } from '../types/certification';
 import type { UserProfile, ReminderPreferences } from '../types/user';
 
-const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
-
-async function getAuthToken(): Promise<string | null> {
-  try {
-    const res = await fetch('/.auth/me');
-    if (!res.ok) return null;
-    const data = await res.json() as { clientPrincipal?: { accessToken?: string } };
-    return data.clientPrincipal?.accessToken ?? null;
-  } catch {
-    return null;
-  }
-}
+const BASE_URL = '/api/v1';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const token = await getAuthToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(init?.headers as Record<string, string> ?? {}),
   };
 

@@ -28,9 +28,9 @@ variables:
     serviceConnectionName: sh-sc-certwatch
 
 stages:
-  # Stage 1: Build API
-  - stage: BuildAPI
-    displayName: 'Build API'
+  # Stage 1: Build Timer Jobs (standalone Function App)
+  - stage: BuildJobs
+    displayName: 'Build Timer Jobs'
     jobs:
       - job: Build
         displayName: 'Compile TypeScript'
@@ -44,31 +44,31 @@ stages:
 
           - script: npm ci
             displayName: 'Install dependencies'
-            workingDirectory: src/api
+            workingDirectory: src/jobs
 
           - script: npm run build
             displayName: 'Compile TypeScript'
-            workingDirectory: src/api
+            workingDirectory: src/jobs
 
           - task: ArchiveFiles@2
-            displayName: 'Package API artifact'
+            displayName: 'Package Jobs artifact'
             inputs:
-              rootFolderOrFile: 'src/api'
+              rootFolderOrFile: 'src/jobs'
               includeRootFolder: false
               archiveType: zip
-              archiveFile: '$(Build.ArtifactStagingDirectory)/api.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/jobs.zip'
               replaceExistingArchive: true
 
           - task: PublishBuildArtifacts@1
-            displayName: 'Publish API artifact'
+            displayName: 'Publish Jobs artifact'
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)/api.zip'
-              ArtifactName: api
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/jobs.zip'
+              ArtifactName: jobs
 
-  # Stage 2: Deploy API
-  - stage: DeployAPI
-    displayName: 'Deploy API'
-    dependsOn: BuildAPI
+  # Stage 2: Deploy Timer Jobs to Function App
+  - stage: DeployJobs
+    displayName: 'Deploy Timer Jobs'
+    dependsOn: BuildJobs
     condition: succeeded()
     jobs:
       - deployment: Deploy
@@ -79,7 +79,7 @@ stages:
             deploy:
               steps:
                 - download: current
-                  artifact: api
+                  artifact: jobs
 
                 - task: AzureFunctionApp@2
                   displayName: 'Deploy Function App'
@@ -87,13 +87,13 @@ stages:
                     connectedServiceNameARM: $(serviceConnectionName)
                     appType: functionAppLinux
                     appName: $(functionAppName)
-                    package: '$(Pipeline.Workspace)/api/api.zip'
+                    package: '$(Pipeline.Workspace)/jobs/jobs.zip'
                     deploymentMethod: zipDeploy
 
-  # Stage 3: Build & Deploy Static Web App
+  # Stage 3: Build & Deploy Static Web App (frontend + managed API)
   - stage: DeployWeb
-    displayName: 'Build & Deploy Web'
-    dependsOn: DeployAPI
+    displayName: 'Build & Deploy Web + API'
+    dependsOn: DeployJobs
     condition: succeeded()
     jobs:
       - job: BuildAndDeploy
@@ -106,15 +106,23 @@ stages:
             inputs:
               versionSpec: '20.x'
 
+          # Build frontend
           - script: npm ci
-            displayName: 'Install dependencies'
+            displayName: 'Install web dependencies'
             workingDirectory: src/web
 
           - script: npm run build
             displayName: 'Vite build'
             workingDirectory: src/web
-            env:
-              VITE_API_URL: https://$(functionAppName).azurewebsites.net/api/v1
+
+          # Build managed API
+          - script: npm ci
+            displayName: 'Install API dependencies'
+            workingDirectory: src/api
+
+          - script: npm run build
+            displayName: 'Compile API TypeScript'
+            workingDirectory: src/api
 
           - task: AzureCLI@2
             displayName: 'Get SWA Deployment Token'
@@ -135,6 +143,7 @@ stages:
             inputs:
               azure_static_web_apps_api_token: $(SWA_DEPLOYMENT_TOKEN)
               app_location: 'src/web/dist'
+              api_location: 'src/api'
               output_location: ''
               skip_app_build: true
               skip_api_build: true

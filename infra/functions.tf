@@ -38,31 +38,16 @@ resource "azurerm_function_app_flex_consumption" "main" {
   runtime_name    = "node"
   runtime_version = "20"
 
-  site_config {
-    cors {
-      allowed_origins = [
-        "https://${azurerm_static_web_app.main.default_host_name}",
-        "http://localhost:5173"
-      ]
-    }
-  }
+  site_config {}
 
   app_settings = {
-    # Entra ID — supports both main tenant and CIAM
-    ENTRA_TENANT_ID = var.entra_tenant_id
-    ENTRA_JWKS_URI  = var.entra_tenant_name != "" ? "https://${var.entra_tenant_name}.ciamlogin.com/${var.entra_tenant_id}/v2.0/.well-known/openid-configuration" : "https://login.microsoftonline.com/${var.entra_tenant_id}/v2.0/.well-known/openid-configuration"
-    ENTRA_AUDIENCE  = var.entra_api_client_id
-
-    # Cosmos DB — endpoint only; auth via Managed Identity
+    # Cosmos DB — auth via Managed Identity (standalone FA for timer jobs)
     COSMOS_ENDPOINT = azurerm_cosmosdb_account.main.endpoint
     COSMOS_DATABASE = azurerm_cosmosdb_sql_database.certwatch.name
 
-    # Azure Communication Services — endpoint only; auth via Managed Identity
+    # Azure Communication Services — auth via Managed Identity
     ACS_ENDPOINT     = "https://${azurerm_communication_service.main.name}.communication.azure.com"
     ACS_SENDER_EMAIL = "noreply@${azurerm_email_communication_service_domain.main.mail_from_sender_domain}"
-
-    # Key Vault URI for vendor secrets
-    KEY_VAULT_URI = azurerm_key_vault.main.vault_uri
   }
 
   identity {

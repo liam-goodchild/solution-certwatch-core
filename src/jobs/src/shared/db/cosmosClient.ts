@@ -1,14 +1,14 @@
 import { CosmosClient, Container } from '@azure/cosmos';
+import { DefaultAzureCredential } from '@azure/identity';
 
 const endpoint = process.env['COSMOS_ENDPOINT']!;
-const key = process.env['COSMOS_KEY']!;
 const databaseId = process.env['COSMOS_DATABASE'] ?? 'certwatch';
 
 let client: CosmosClient | null = null;
 
 function getClient(): CosmosClient {
   if (!client) {
-    client = new CosmosClient({ endpoint, key });
+    client = new CosmosClient({ endpoint, aadCredentials: new DefaultAzureCredential() });
   }
   return client;
 }
