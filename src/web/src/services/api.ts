@@ -1,7 +1,7 @@
 import type { Certification, CreateCertificationRequest, UpdateCertificationRequest } from '../types/certification';
 import type { UserProfile, ReminderPreferences } from '../types/user';
 
-const BASE_URL = '/api/v1';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 async function getAuthToken(): Promise<string | null> {
   try {

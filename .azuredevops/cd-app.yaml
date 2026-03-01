@@ -113,6 +113,8 @@ stages:
           - script: npm run build
             displayName: 'Vite build'
             workingDirectory: src/web
+            env:
+              VITE_API_URL: https://$(functionAppName).azurewebsites.net/api/v1
 
           - task: AzureCLI@2
             displayName: 'Get SWA Deployment Token'

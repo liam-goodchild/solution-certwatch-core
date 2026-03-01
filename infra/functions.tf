@@ -38,7 +38,14 @@ resource "azurerm_function_app_flex_consumption" "main" {
   runtime_name    = "node"
   runtime_version = "20"
 
-  site_config {}
+  site_config {
+    cors {
+      allowed_origins = [
+        "https://${azurerm_static_web_app.main.default_host_name}",
+        "http://localhost:5173"
+      ]
+    }
+  }
 
   app_settings = {
     # Entra ID — supports both main tenant and CIAM

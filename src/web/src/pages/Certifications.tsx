@@ -9,39 +9,65 @@ export function Certifications() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Certification | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function load() {
-    const data = await api.certifications.list();
-    setCerts(data);
+    try {
+      const data = await api.certifications.list();
+      setCerts(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load certifications');
+    }
   }
 
   useEffect(() => {
-    load().catch(console.error).finally(() => setLoading(false));
+    load().finally(() => setLoading(false));
   }, []);
 
   async function handleCreate(data: CreateCertificationRequest) {
-    await api.certifications.create(data);
-    await load();
-    setShowForm(false);
+    try {
+      setError(null);
+      await api.certifications.create(data);
+      await load();
+      setShowForm(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create certification');
+    }
   }
 
   async function handleUpdate(data: CreateCertificationRequest) {
     if (!editing) return;
-    await api.certifications.update(editing.id, data);
-    await load();
-    setEditing(null);
+    try {
+      setError(null);
+      await api.certifications.update(editing.id, data);
+      await load();
+      setEditing(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update certification');
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this certification?')) return;
-    await api.certifications.remove(id);
-    await load();
+    try {
+      setError(null);
+      await api.certifications.remove(id);
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete certification');
+    }
   }
 
   async function handleSync(id: string) {
-    const result = await api.certifications.sync(id) as { status: string; message?: string };
-    alert(result.message ?? `Sync status: ${result.status}`);
-    await load();
+    try {
+      setError(null);
+      const result = await api.certifications.sync(id) as { status: string; message?: string };
+      alert(result.message ?? `Sync status: ${result.status}`);
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sync failed');
+    }
   }
 
   if (loading) return <p>Loading...</p>;
@@ -59,6 +85,12 @@ export function Certifications() {
           </button>
         )}
       </div>
+
+      {error && (
+        <div style={{ padding: '0.75rem 1rem', marginBottom: '1rem', background: '#fef2f2', color: '#991b1b', border: '1px solid #fecaca', borderRadius: '4px' }}>
+          {error}
+        </div>
+      )}
 
       {(showForm || editing) && (
         <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
