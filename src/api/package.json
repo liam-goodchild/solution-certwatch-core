@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "CertWatch SWA managed Functions API",
   "main": "dist/src/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
