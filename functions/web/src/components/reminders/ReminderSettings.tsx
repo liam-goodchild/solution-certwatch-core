@@ -60,7 +60,7 @@ export function ReminderSettings({ initial, onSaved }: Props) {
             onChange={(e) => setDaysInput(e.target.value)}
             placeholder="30, 14, 7"
           />
-          <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>e.g. "30, 14, 7" — sends emails 30, 14, and 7 days before expiry</span>
+          <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>e.g. &quot;30, 14, 7&quot; &mdash; sends emails 30, 14, and 7 days before expiry</span>
         </div>
       )}
 
