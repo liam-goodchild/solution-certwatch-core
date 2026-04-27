@@ -38,7 +38,7 @@ jobs:
 
       - name: Install API dependencies
         run: npm ci
-        working-directory: functions
+        working-directory: functions/api
 
       - name: Azure login
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
@@ -66,5 +66,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: frontend
-          api_location: functions
+          api_location: functions/api
           output_location: ""
