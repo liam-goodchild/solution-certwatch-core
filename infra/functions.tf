@@ -54,9 +54,3 @@ resource "azurerm_function_app_flex_consumption" "main" {
 
   tags = local.tags
 }
-
-resource "azurerm_role_assignment" "function_storage_blob" {
-  scope                = azurerm_storage_account.functions.id
-  role_definition_name = "Storage Blob Data Owner"
-  principal_id         = azurerm_function_app_flex_consumption.main.identity[0].principal_id
-}
