@@ -28,3 +28,5 @@ skip-check:
   - CKV2_AZURE_21 # Blob service read logging not required for deployment container
   # Static Web App auth config - clientSecretSettingName is an app setting name, not a secret value
   - CKV_SECRET_6
+  - CKV_AZURE_244 # Function app storage uses shared key access by design
+  - CKV2_AZURE_40 # Function app storage uses shared key authorisation by design
