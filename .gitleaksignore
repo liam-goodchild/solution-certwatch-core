@@ -1,0 +1,5 @@
+# Historical commits flagged by gitleaks. entra_api_client_id is an Entra
+# application (client) ID — a public identifier, not a secret; the live
+# value carries an inline gitleaks:allow.
+aef48f823cc67bbf4b5334ace23590c858c3c7c0:infra/vars/globals.tfvars:generic-api-key:7
+005478fbf1c157fa3bb13c6acde81ecc49af6c5b:infra/vars/uks/dev.tfvars:generic-api-key:14
