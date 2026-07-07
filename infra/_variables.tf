@@ -38,18 +38,6 @@ variable "cloudflare_account_id" {
   description = "Cloudflare account ID."
 }
 
-variable "entra_api_client_id" {
-  type        = string
-  description = "App registration client ID for the Functions API audience."
-  sensitive   = true
-}
-
-variable "entra_client_secret" {
-  type        = string
-  description = "Entra app registration client secret for SWA authentication."
-  sensitive   = true
-}
-
 variable "brevo_api_key" {
   type        = string
   description = "Brevo API key for transactional email."
