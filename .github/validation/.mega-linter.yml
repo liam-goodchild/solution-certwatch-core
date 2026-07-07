@@ -1,0 +1,34 @@
+# MegaLinter configuration for app repos (cupcake flavour).
+# Terraform IaC scanning (fmt, validate, TFLint, Checkov) is owned by the shared
+# reusable-terraform.yml PR-validation workflow, so those linters are disabled
+# here to avoid duplicate and conflicting findings. TypeScript/TSX linting is
+# owned by the frontend's own eslint setup, matching the previous Super-Linter
+# configuration.
+DISABLE_LINTERS:
+  - TERRAFORM_TFLINT
+  - TERRAFORM_TERRASCAN
+  - TERRAFORM_TERRAFORM_FMT # hygiene job runs fmt -check
+  - TERRAFORM_TERRAGRUNT # Terragrunt not in use
+  - REPOSITORY_CHECKOV
+  - REPOSITORY_KICS # IaC scanning owned by Checkov plan-aware scan
+  - REPOSITORY_TRIVY # IaC scanning owned by Checkov plan-aware scan
+  - REPOSITORY_TRIVY_SBOM # no dependency artefacts to SBOM here
+  - REPOSITORY_SYFT # no dependency artefacts to SBOM here
+  - REPOSITORY_GRYPE # slowest linter (~1 min); npm audit covers dependencies
+  - REPOSITORY_SECRETLINT # gitleaks covers secret scanning
+  - REPOSITORY_TRUFFLEHOG # gitleaks covers secret scanning
+  - SPELL_CSPELL
+  - MARKDOWN_MARKDOWN_TABLE_FORMATTER
+  - MARKDOWN_MARKDOWNLINT
+  - COPYPASTE_JSCPD
+  - TSX_ESLINT # TS/TSX linting owned by the frontend eslint setup
+  - TYPESCRIPT_ES
+  - TYPESCRIPT_STANDARD
+  - TYPESCRIPT_PRETTIER
+
+JAVASCRIPT_ES_CONFIG_FILE: .github/validation/.eslintrc.json
+CSS_STYLELINT_CONFIG_FILE: .github/validation/.stylelintrc.json
+HTML_HTMLHINT_CONFIG_FILE: .github/validation/.htmlhintrc
+
+SHOW_ELAPSED_TIME: true
+FLAVOR_SUGGESTIONS: false

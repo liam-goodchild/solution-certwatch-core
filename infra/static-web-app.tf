@@ -6,11 +6,9 @@ resource "azurerm_static_web_app" "main" {
   sku_size            = "Free"
 
   app_settings = {
-    ENTRA_CLIENT_ID     = var.entra_api_client_id
-    ENTRA_CLIENT_SECRET = var.entra_client_secret
-    COSMOS_ENDPOINT     = azurerm_cosmosdb_account.main.endpoint
-    COSMOS_KEY          = azurerm_cosmosdb_account.main.primary_key
-    COSMOS_DATABASE     = azurerm_cosmosdb_sql_database.certwatch.name
+    COSMOS_ENDPOINT = azurerm_cosmosdb_account.main.endpoint
+    COSMOS_KEY      = azurerm_cosmosdb_account.main.primary_key
+    COSMOS_DATABASE = azurerm_cosmosdb_sql_database.certwatch.name
 
     BREVO_API_KEY   = var.brevo_api_key
     EMAIL_FROM      = var.email_from
