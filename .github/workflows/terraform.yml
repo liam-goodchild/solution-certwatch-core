@@ -77,9 +77,9 @@ jobs:
         with:
           keyvault_name: kv-platform-${{ inputs.env || 'prd' }}-uks-02
           secrets: |
-            TF_VAR_cloudflare_api_token=cloudflare-api-token
-            TF_VAR_cloudflare_account_id=cloudflare-account-id
-            TF_VAR_brevo_api_key=certwatch-brevo-api-key
+            TF_VAR_cloudflare_api_token=platform-cloudflare-api-token
+            TF_VAR_cloudflare_account_id=platform-cloudflare-account-id
+            TF_VAR_brevo_api_key=app-certwatch-brevo-api-key
           login: "false"
 
       - name: "Terraform Init"
